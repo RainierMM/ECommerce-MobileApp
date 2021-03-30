@@ -15,6 +15,9 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import firebase from "../Config";
+import { ImageBackground } from "react-native";
+
+let rutaFondo = require("../assets/Background/fondoE.jpg");
 
 const { width } = Dimensions.get("window");
 const height = (width * 100) / 100; // 60%
@@ -25,7 +28,7 @@ let year = new Date().getFullYear();
 
 let fechaHoy = `${date}/${month}/${year}`;
 
-const insertarDatos = (dir, corr, tlf, precios, dia, imagen) => {
+const insertarDatos = (dir, corr, tlf, precios, dia, imagen, est) => {
   firebase
     .database()
     .ref(`ehommerce/compras/${firebase.auth().currentUser.uid}`)
@@ -36,6 +39,7 @@ const insertarDatos = (dir, corr, tlf, precios, dia, imagen) => {
       total: precios,
       fecha: dia,
       img: imagen,
+      estado: est,
     });
 };
 
@@ -48,7 +52,8 @@ export default class Cart extends React.Component {
       telefono: "",
       total: "",
       fecha: fechaHoy,
-      img: "",
+      img: {},
+      estado: "Por confirmar",
       campos: [],
       active: 0,
     };
@@ -58,6 +63,7 @@ export default class Cart extends React.Component {
     const items = firebase
       .database()
       .ref(`ehommerce/cart/${firebase.auth().currentUser.uid}`);
+
     items.on("value", (datasnap) => {
       let data = datasnap.val();
       if (data) {
@@ -80,26 +86,29 @@ export default class Cart extends React.Component {
     });
   }
 
-  // Funcion para el click
+  // Click
 
   confirmacion = () => {
-    let img = this.state.campos.reduce((acc, item, index) => {
+    let campoImg = this.state.campos.reduce((acc, item, index) => {
       return {
         ...acc,
         [index]: item.img,
       };
     }, {});
+    console.log("[IMG]", campoImg);
+    this.setState({ img: campoImg }, function () {
+      insertarDatos(
+        this.state.direccion,
+        this.state.email,
+        this.state.telefono,
+        this.state.total,
+        this.state.fecha,
+        this.state.img,
+        this.state.estado
+      );
 
-    console.log("[CAMPOS-IMGS]", img);
-    this.setState({ img });
-    insertarDatos(
-      this.state.direccion,
-      this.state.email,
-      this.state.telefono,
-      this.state.total,
-      this.state.fecha,
-      this.state.img
-    );
+      console.log("setState completed", this.state.img);
+    });
 
     Alert.alert(
       "Su compra ha sido registrada, por favor revise el estado en su perfil"
@@ -240,9 +249,19 @@ export default class Cart extends React.Component {
             </View>
           </>
         ) : (
-          <View>
-            <Text>NO HAY ITEMS EN EL CARRITO</Text>
-          </View>
+          <ImageBackground source={rutaFondo} style={styles.fondo}>
+            <View>
+              <Text
+                style={{
+                  alignSelf: "center",
+                  marginTop: 250,
+                  fontWeight: "bold",
+                }}
+              >
+                NO HAY ITEMS EN EL CARRITO
+              </Text>
+            </View>
+          </ImageBackground>
         )}
       </>
     );
@@ -277,5 +296,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1.5,
     color: "red",
+  },
+  fondo: {
+    flex: 1,
+    width: "100%",
+    resizeMode: "cover",
   },
 });

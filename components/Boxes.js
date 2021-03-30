@@ -14,13 +14,6 @@ export default class Boxes extends React.Component {
             <Image source={this.props.imageSource} style={styles.image} />
           </TouchableOpacity>
         </View>
-        {/* <View style={styles.box}>
-          <TouchableOpacity onPress={this.props.navegar2}>
-            <View style={styles.inner}>
-              <Image source={this.props.imageSource2} style={styles.image} />
-            </View>
-          </TouchableOpacity>
-        </View> */}
       </View>
     );
   }

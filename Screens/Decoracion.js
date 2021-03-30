@@ -38,9 +38,13 @@ export default class Decoracion extends React.Component {
 
   navegar = (campo) => {
     const { navigation } = this.props;
-    navigation.navigate("Detalles", campo);
+    if (!firebase.auth().currentUser) {
+      navigation.navigate("Login");
+      alert("Por favor, inicie sesion");
+    } else {
+      navigation.navigate("Detalles", campo);
+    }
   };
-
   componentDidMount() {
     const items = firebase.database().ref(`ehommerce/decoracion`);
     items.on("value", (datasnap) => {
@@ -59,7 +63,7 @@ export default class Decoracion extends React.Component {
 
     return (
       <>
-        {console.log("[CAMPOS]", campos)}
+        {/* {console.log("[CAMPOS]", campos)} */}
         <Header navigation={navigation} />
         <ScrollView style={styles.scrollContainer}>
           <View style={styles.sectionContainer}>

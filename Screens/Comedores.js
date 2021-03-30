@@ -10,7 +10,6 @@ import {
 import { Contexto } from "../Contexto";
 import Header from "../components/Header";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import Boxes from "../components/Boxes";
 import firebase from "../Config";
 
 //     firebase.firestore().collection("productos").onSnapshot((querySnapshot) => {
@@ -38,7 +37,12 @@ export default class Comedores extends React.Component {
 
   navegar = (campo) => {
     const { navigation } = this.props;
-    navigation.navigate("Detalles", campo);
+    if (!firebase.auth().currentUser) {
+      navigation.navigate("Login");
+      alert("Por favor, inicie sesion");
+    } else {
+      navigation.navigate("Detalles", campo);
+    }
   };
 
   componentDidMount() {
@@ -59,7 +63,7 @@ export default class Comedores extends React.Component {
 
     return (
       <>
-        {console.log("[CAMPOS]", campos)}
+        {/* {console.log("[CAMPOS]", campos)} */}
         <Header navigation={navigation} />
         <ScrollView style={styles.scrollContainer}>
           <View style={styles.sectionContainer}>

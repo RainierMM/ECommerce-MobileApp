@@ -21,7 +21,7 @@ export default class Detalles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: firebase.auth().currentUser.email,
+      email: firebase.auth().currentUser.email, //
       nombre: this.props.route.params.nombre,
       precio: this.props.route.params.precio,
       img: this.props.route.params.img,

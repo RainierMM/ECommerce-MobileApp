@@ -13,6 +13,8 @@ import {
 
 import firebase from "../Config";
 
+let rutaFondo = require("../assets/Background/fondoE.jpg");
+
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -69,35 +71,39 @@ export default class Login extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
-        <TextInput
-          style={styles.estiloInput}
-          placeholder="Email"
-          value={this.state.email}
-          onChangeText={(val) => this.validarCampo(val, "email")}
-        />
-        <TextInput
-          style={styles.estiloInput}
-          placeholder="Password"
-          value={this.state.password}
-          onChangeText={(val) => this.validarCampo(val, "password")}
-          maxLength={15}
-          secureTextEntry={true}
-        />
-        <TouchableHighlight
-          style={styles.botonRegistrarse}
-          color="#0877AF"
-          onPress={() => this.accederUsuario()}
-        >
-          <Text style={styles.textoBoton}>ACCEDER</Text>
-        </TouchableHighlight>
-        <Text
-          style={styles.loginText}
-          onPress={() => this.props.navigation.navigate("Register")}
-        >
-          ¿No estás registrado? Haz click aqui !
-        </Text>
-      </View>
+      <>
+        <ImageBackground source={rutaFondo} style={styles.fondo}>
+          <View style={styles.container}>
+            <TextInput
+              style={styles.estiloInput}
+              placeholder="Email"
+              value={this.state.email}
+              onChangeText={(val) => this.validarCampo(val, "email")}
+            />
+            <TextInput
+              style={styles.estiloInput}
+              placeholder="Password"
+              value={this.state.password}
+              onChangeText={(val) => this.validarCampo(val, "password")}
+              maxLength={15}
+              secureTextEntry={true}
+            />
+            <TouchableHighlight
+              style={styles.botonRegistrarse}
+              color="#0877AF"
+              onPress={() => this.accederUsuario()}
+            >
+              <Text style={styles.textoBoton}>ACCEDER</Text>
+            </TouchableHighlight>
+            <Text
+              style={styles.loginText}
+              onPress={() => this.props.navigation.navigate("Register")}
+            >
+              ¿No estás registrado? Haz click aqui !
+            </Text>
+          </View>
+        </ImageBackground>
+      </>
     );
   }
 }
@@ -121,7 +127,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   loginText: {
-    color: "#0877AF",
+    color: "#13214C",
     marginTop: 40,
     textAlign: "center",
     elevation: 8,
